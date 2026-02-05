@@ -55,6 +55,7 @@ public class Solution {
 			
 			for (int i=0; i<N-1; i++) {
 				sum += Math.abs(picked[i+1].r - picked[i].r) + Math.abs(picked[i+1].c - picked[i].c);
+                if (sum > min) return;
 			}
 			
 			min = min < sum ? min : sum;
