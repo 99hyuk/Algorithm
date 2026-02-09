@@ -120,6 +120,7 @@ public class Solution {
 					dfs(idx+1, distance, connect, i*N+j);
 					
 					visited[i][j] = false;
+                    return;
 				}
 			}
 		}
