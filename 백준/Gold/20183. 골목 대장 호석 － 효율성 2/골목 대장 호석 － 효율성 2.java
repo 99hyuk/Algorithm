@@ -52,6 +52,7 @@ public class Main {
 			int cost = Integer.parseInt(st.nextToken());
 			
 			graph.get(start).add(new NodeHs(to, cost));
+            graph.get(to).add(new NodeHs(start, cost));
 			costList.add(cost);
 		}
 		
