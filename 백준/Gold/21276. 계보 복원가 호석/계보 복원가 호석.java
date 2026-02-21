@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +93,7 @@ public class Main {
 		for (int i=0; i<children.size(); i++) {
 			sb.append(names[i] + " " + children.get(map.get(names[i])).size() + " ");
 			for (int j=0; j<children.get(map.get(names[i])).size(); j++) {
+				Collections.sort(children.get(map.get(names[i])));
 				sb.append(names[children.get(map.get(names[i])).get(j)] + " ");
 			}
 			sb.append("\n");
