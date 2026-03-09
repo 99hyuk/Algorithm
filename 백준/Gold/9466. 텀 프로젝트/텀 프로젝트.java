@@ -10,7 +10,8 @@ public class Main {
 	
 	static int n, arr[];
 	static boolean[] visited;
-	static int[] indegree;
+	static boolean[] finished;
+	static int cnt;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,46 +22,40 @@ public class Main {
 		for (int t=1; t<=T; t++) {
 			n = Integer.parseInt(br.readLine());
 			arr = new int[n+1];
-			indegree = new int[n+1];
 			visited = new boolean[n+1];
+			finished = new boolean[n+1];
 			
 			st = new StringTokenizer(br.readLine());
 			for (int i=1; i<=n; i++) {
 				arr[i] = Integer.parseInt(st.nextToken());
-				indegree[arr[i]]++;
 			}
 
-			topological();
-			
-			int cnt = 0;
+			cnt = 0;
 			for (int i=1; i<=n; i++) {
-				if(visited[i]) cnt++;
+				if(finished[i]) continue;
+				dfs(i);
 			}
-			sb.append(cnt+"\n");
+			
+			sb.append(n-cnt+"\n");
 		}
 		System.out.println(sb);
 	}
 	
-	static void dfs(int num) {
+	static void dfs(int now) {
+		visited[now] = true;
+		int next = arr[now];
 		
-	}
-	
-	static void topological() {
-		Queue<Integer> Q = new ArrayDeque<>();
-		for (int i=1; i<=n; i++) {
-			if(indegree[i] == 0) {
-				Q.offer(i);
-			}
+		if(!visited[next]) {
+			dfs(next);
+		} else if (!finished[next]){
+			cnt++;
+			int temp = next;
+			while (temp != now) { 
+                cnt++;
+                temp = arr[temp]; 
+            }
 		}
 		
-		while(!Q.isEmpty()) {
-			int curIdx = Q.poll();
-			visited[curIdx] = true;
-			
-			indegree[arr[curIdx]]--;
-			if(indegree[arr[curIdx]] == 0) {
-				Q.offer(arr[curIdx]);
-			}
-		}
+		finished[now] = true;
 	}
 }
