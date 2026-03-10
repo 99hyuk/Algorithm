@@ -1,75 +1,64 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-class PointN {
-	int r;
-	int c;
-
-	PointN(int r, int c) {
-		this.r = r;
-		this.c = c;
-	}
-}
-
 public class Solution {
 	
-	static boolean[] isSelected;
-	static PointN[] map;
-	static PointN[] picked;
-	static PointN office, home;
-	static int N;
+	static int[][] people;
+	static int[] arr;
+	static int n;
 	static int min;
+	static boolean[] visited;
 	
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		StringTokenizer st;
+		
 		int T = Integer.parseInt(br.readLine());
-
-		for (int test_case = 1; test_case <= T; test_case++) {
-			N = Integer.parseInt(br.readLine());
-			map = new PointN[N];
-			isSelected = new boolean[N];
-			picked = new PointN[N];
+		
+		for (int t=1; t<=T; t++) {
+			n = Integer.parseInt(br.readLine());
+			people = new int[n+2][n+2];
+			visited = new boolean[n];
+			arr = new int[n];
 			min = Integer.MAX_VALUE;
 			
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			office = new PointN(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
-			home = new PointN(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
-			
-			for (int i=0; i<N; i++) {
-				map[i] = new PointN(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+			st = new StringTokenizer(br.readLine());
+			for (int i=0; i<n+2; i++) {
+				people[i][0] = Integer.parseInt(st.nextToken());
+				people[i][1] = Integer.parseInt(st.nextToken());
 			}
 			
 			dfs(0);
-			
-			System.out.println("#" + test_case + " " + min);
-		}
+			sb.append("#" + t + " " + min + "\n");
 
+		}
+		System.out.println(sb);
 	}
 	
-	static void dfs (int idx) {
-		if (idx == N) {
+	static void dfs(int idx) {
+		if(idx == n) {
 			int sum = 0;
-			sum += Math.abs(picked[0].r - office.r) + Math.abs(picked[0].c - office.c);
-			sum += Math.abs(picked[N-1].r - home.r) + Math.abs(picked[N-1].c - home.c);
-			
-			for (int i=0; i<N-1; i++) {
-				sum += Math.abs(picked[i+1].r - picked[i].r) + Math.abs(picked[i+1].c - picked[i].c);
-                if (sum > min) return;
+			sum += Math.abs(people[0][0] - people[arr[0]+2][0]) + Math.abs(people[0][1] - people[arr[0]+2][1]);
+			sum += Math.abs(people[1][0] - people[arr[n-1]+2][0]) + Math.abs(people[1][1] - people[arr[n-1]+2][1]);
+			for (int i=0; i<n-1; i++) {
+				sum += Math.abs(people[arr[i]+2][0] - people[arr[i+1]+2][0]) + Math.abs(people[arr[i]+2][1] - people[arr[i+1]+2][1]);
+				if (sum > min) return;
 			}
 			
-			min = min < sum ? min : sum;
-			
+			min = Math.min(min, sum);
 			return;
 		}
 		
-		for (int i=0; i<N; i++) {
-			if (isSelected[i]) continue;
-			
-			isSelected[i] = true;
-			picked[idx] = map[i];
-			dfs(idx + 1);
-			isSelected[i] = false;
+		for (int i=0; i<n; i++) {
+			if(visited[i]) continue;
+			arr[idx] = i;
+			visited[i] = true;
+			dfs(idx+1);
+			arr[idx] = 0;
+			visited[i] = false;
 		}
 	}
 }
